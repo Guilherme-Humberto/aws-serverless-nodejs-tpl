@@ -1,0 +1,30 @@
+service: aws-serverless
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-2
+  memorySize: 128
+  timeout: 3
+
+functions:
+  healthCheck:
+    handler: src/main.healthCheck
+    description: A function to check if project is running
+    events:
+      - httpApi:
+          method: GET
+          path: /healthCheck
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  - serverless-dotenv
+
+custom:
+  webpack:
+    webpackConfig: "webpack.config.js"
+  serverless-offline:
+    useChildProcess: true
+    httpPort: 3000
